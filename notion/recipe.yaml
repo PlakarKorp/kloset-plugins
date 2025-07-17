@@ -1,0 +1,4 @@
+name: notion
+version: v0.1.0-devel.ad53b3c
+repository: github.com/PlakarKorp/integration-notion
+checksum: sha256:abadbeef15adeadbeefea7deadbeef
