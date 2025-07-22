@@ -1,4 +1,4 @@
 name: rclone
-version: v0.1.0-devel.c10c5af
+version: v0.1.0-devel.bb1e4ac
 repository: https://github.com/PlakarKorp/integration-rclone
 checksum: sha256:abadbeef15adeadbeefea7deadbeef
