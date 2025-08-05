@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Set up Go 1.23.4
         uses: actions/setup-go@v5
@@ -23,25 +25,29 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y git make yq
 
-      - name: Validate changed recipes
+      - name: Validate all recipe.yaml files in the PR
         run: |
           set -e
 
-          # Loop over changed recipe.yaml files in the PR diff
-          for path in $(git diff --name-only HEAD^ | grep 'recipe.yaml'); do
-            echo "📄 Found modified recipe: $path"
+          for path in $(find . -name recipe.yaml); do
+            echo "📄 Found recipe: $path"
 
             name=$(yq '.name' "$path")
             version=$(yq '.version' "$path")
             repo=$(yq '.repository' "$path")
 
-            echo "🔗 Cloning $repo at branch $version"
+            if [ -z "$name" ] || [ -z "$version" ] || [ -z "$repo" ]; then
+              echo "❌ Missing required fields in $path"
+              exit 1
+            fi
+
+            echo "🔗 Cloning $repo @ $version"
             git clone --depth 1 --branch "$version" "$repo" "$name"
 
-            echo "🛠️ Building $name..."
+            echo "🛠️ Running make in $name/"
             cd "$name"
             make
             cd ..
 
-            echo "✅ $name built successfully from $repo @ $version"
+            echo "✅ $name built successfully"
           done
