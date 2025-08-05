@@ -1,0 +1,4 @@
+name: gs
+version: v1.0.0-beta.2
+repository: https://github.com/PlakarKorp/integration-gcs
+checksum: sha256:bbadbeef15adeadbeefea7deadbeef
