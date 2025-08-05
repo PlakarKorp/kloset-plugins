@@ -1,0 +1,45 @@
+name: Validate Integration Recipes
+
+on:
+  pull_request:
+    paths:
+      - '**/recipe.yaml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the PR branch
+        uses: actions/checkout@v4
+
+      - name: Install required tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git make jq yq
+
+      - name: Set up Go 1.23.4
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23.4
+          
+      - name: Validate recipes
+        run: |
+          set -e
+          # Loop over all changed recipe.yaml files in the PR
+          for path in $(git diff --name-only origin/main | grep 'recipe.yaml'); do
+            echo "📄 Validating $path"
+            name=$(yq '.name' "$path")
+            version=$(yq '.version' "$path")
+            repo=$(yq '.repository' "$path")
+
+            echo "🔗 Cloning $repo @ $version"
+            git clone --depth 1 --branch "$version" "$repo" "$name"
+
+            echo "🛠️ Running make inside $name/"
+            cd "$name"
+            make
+            cd ..
+            echo "✅ $name built successfully"
+          done
+
