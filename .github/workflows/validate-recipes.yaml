@@ -32,9 +32,9 @@ jobs:
           for path in $(find . -name recipe.yaml); do
             echo "📄 Found recipe: $path"
 
-            name=$(yq '.name' "$path")
-            version=$(yq '.version' "$path")
-            repo=$(yq '.repository' "$path")
+            name=$(yq -r '.name' "$path")
+            version=$(yq -r '.version' "$path")
+            repo=$(yq -r '.repository' "$path")
 
             if [ -z "$name" ] || [ -z "$version" ] || [ -z "$repo" ]; then
               echo "❌ Missing required fields in $path"
