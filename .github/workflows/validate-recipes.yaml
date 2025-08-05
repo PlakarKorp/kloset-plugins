@@ -10,36 +10,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout the PR branch
+      - name: Checkout PR
         uses: actions/checkout@v4
-
-      - name: Install required tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y git make jq yq
 
       - name: Set up Go 1.23.4
         uses: actions/setup-go@v5
         with:
           go-version: 1.23.4
-          
-      - name: Validate recipes
+
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git make yq
+
+      - name: Validate changed recipes
         run: |
           set -e
-          # Loop over all changed recipe.yaml files in the PR
-          for path in $(git diff --name-only origin/main | grep 'recipe.yaml'); do
-            echo "📄 Validating $path"
+
+          # Loop over changed recipe.yaml files in the PR diff
+          for path in $(git diff --name-only HEAD^ | grep 'recipe.yaml'); do
+            echo "📄 Found modified recipe: $path"
+
             name=$(yq '.name' "$path")
             version=$(yq '.version' "$path")
             repo=$(yq '.repository' "$path")
 
-            echo "🔗 Cloning $repo @ $version"
+            echo "🔗 Cloning $repo at branch $version"
             git clone --depth 1 --branch "$version" "$repo" "$name"
 
-            echo "🛠️ Running make inside $name/"
+            echo "🛠️ Building $name..."
             cd "$name"
             make
             cd ..
-            echo "✅ $name built successfully"
-          done
 
+            echo "✅ $name built successfully from $repo @ $version"
+          done
