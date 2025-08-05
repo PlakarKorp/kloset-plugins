@@ -28,7 +28,9 @@ jobs:
       - name: Validate all recipe.yaml files in the PR
         run: |
           set -e
-
+          
+          mkdir -p .tmp_build
+          
           for path in $(find . -name recipe.yaml); do
             echo "📄 Found recipe: $path"
 
@@ -42,7 +44,7 @@ jobs:
             fi
 
             echo "🔗 Cloning $repo @ $version"
-            git clone --depth 1 --branch "$version" "$repo" "$name"
+            git clone --depth 1 --branch "$version" "$repo" ".tmp_build/$name"
 
             echo "🛠️ Running make in $name/"
             cd "$name"
