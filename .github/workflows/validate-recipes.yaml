@@ -44,12 +44,15 @@ jobs:
             fi
 
             echo "🔗 Cloning $repo @ $version"
-            git clone --depth 1 --branch "$version" "$repo" ".tmp_build/$name"
+            git clone "$repo" ".tmp_build/$name"
+
+            echo "🔀 Checking out $version"
+            cd ".tmp_build/$name"
+            git checkout "$version"
 
             echo "🛠️ Running make in $name/"
-            cd "$name"
             make
-            cd ..
+            cd -
 
             echo "✅ $name built successfully"
           done
