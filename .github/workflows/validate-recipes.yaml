@@ -7,13 +7,14 @@ on:
 
 jobs:
   validate:
+    name: Build modified plugins from recipe.yaml
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 2  # Required to diff with base branch
 
       - name: Set up Go 1.23.4
         uses: actions/setup-go@v5
@@ -25,29 +26,44 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y git make yq
 
-      - name: Validate all recipe.yaml files in the PR
+      - name: Build integrations defined in modified recipe.yaml files
         run: |
           set -e
+          mkdir -p .tmp_build
 
-          for path in $(find . -name recipe.yaml); do
-            echo "📄 Found recipe: $path"
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.sha }}"
 
-            name=$(yq '.name' "$path")
-            version=$(yq '.version' "$path")
-            repo=$(yq '.repository' "$path")
+          echo "🔍 Looking for modified recipe.yaml files between $BASE_SHA and $HEAD_SHA"
+          CHANGED=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- '**/recipe.yaml')
+
+          if [ -z "$CHANGED" ]; then
+            echo "✅ No modified recipe.yaml files found. Skipping build."
+            exit 0
+          fi
+
+          for path in $CHANGED; do
+            echo "📄 Processing $path"
+
+            name=$(yq -r '.name' "$path")
+            version=$(yq -r '.version' "$path")
+            repo=$(yq -r '.repository' "$path")
 
             if [ -z "$name" ] || [ -z "$version" ] || [ -z "$repo" ]; then
               echo "❌ Missing required fields in $path"
               exit 1
             fi
 
-            echo "🔗 Cloning $repo @ $version"
-            git clone --depth 1 --branch "$version" "$repo" "$name"
+            echo "🔗 Cloning $repo into .tmp_build/$name"
+            git clone "$repo" ".tmp_build/$name"
 
-            echo "🛠️ Running make in $name/"
-            cd "$name"
+            echo "🔀 Checking out $version"
+            cd ".tmp_build/$name"
+            git checkout "$version"
+
+            echo "🛠️ Running make"
             make
-            cd ..
 
-            echo "✅ $name built successfully"
+            echo "✅ Successfully built $name"
+            cd -
           done
