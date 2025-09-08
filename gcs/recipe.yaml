@@ -1,4 +1,4 @@
 name: gcs
-version: v1.0.1
+version: v1.0.3
 repository: https://github.com/PlakarKorp/integration-gcs
 checksum: sha256:bbadbeef15adeadbeefea7deadbeef
