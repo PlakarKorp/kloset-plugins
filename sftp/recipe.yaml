@@ -1,4 +1,4 @@
 name: sftp
-version: v1.0.5
+version: v1.0.7
 repository: https://github.com/PlakarKorp/integration-sftp
 checksum: sha256:abadbeef15adeadbeefea7deadbeef
