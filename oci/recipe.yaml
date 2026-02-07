@@ -1,0 +1,4 @@
+name: oci
+version: v1.1.0-beta.3
+repository: https://github.com/PlakarKorp/integration-oci
+checksum: sha256:abadbeef15adeadbeefea7deadbeef
