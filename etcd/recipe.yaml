@@ -1,4 +1,4 @@
 name: etcd
-version: v1.1.0-beta.1
+version: v1.1.0-beta.3
 repository: https://github.com/PlakarKorp/integration-etcd
 checksum: sha256:bbadbeef15adeadbeefea7deadbeef
