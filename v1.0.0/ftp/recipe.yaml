@@ -1,0 +1,4 @@
+name: ftp
+version: v1.0.7
+repository: https://github.com/PlakarKorp/integration-ftp
+checksum: sha256:bbadbeef15adeadbeefea7deadbeef
