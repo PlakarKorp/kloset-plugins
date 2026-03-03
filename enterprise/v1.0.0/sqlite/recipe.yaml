@@ -1,0 +1,4 @@
+name: sqlite
+version: v1.0.5
+repository: https://github.com/PlakarKorp/integration-sqlite
+checksum: sha256:abadbeef15adeadbeefea7deadbeef
