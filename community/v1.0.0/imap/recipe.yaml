@@ -1,0 +1,4 @@
+name: imap
+version: v1.0.0-rc3
+repository: https://github.com/PlakarKorp/integration-imap
+checksum: sha256:abadbeef15adeadbeefea7deadbeef
