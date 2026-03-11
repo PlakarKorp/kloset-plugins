@@ -1,0 +1,4 @@
+name: aws-sm
+version: v1.1.0
+repository: https://github.com/PlakarKorp/integration-aws-sm
+checksum: sha256:bbadbeef15adeadbeefea7deadbeef
