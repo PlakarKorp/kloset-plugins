@@ -57,7 +57,6 @@ and the checksum of that tag:
 name: imap
 version: v0.1.0-devel.697fd98
 repository: https://github.com/PlakarKorp/integration-imap
-checksum: 697fd983ee4fecc91396af0e34dbe52fcda0f1fe
 ```
 
 Our team will then validate the PR and add you to the listing.
