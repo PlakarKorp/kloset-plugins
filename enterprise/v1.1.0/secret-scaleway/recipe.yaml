@@ -1,4 +1,4 @@
 name: secret-scaleway
-version: v1.1.0-beta.1
+version: v1.1.0-beta.2
 repository: https://github.com/PlakarKorp/integration-secret-scaleway
 checksum: sha256:bbadbeef15adeadbeefea7deadbeef
