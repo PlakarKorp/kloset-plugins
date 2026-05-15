@@ -1,4 +1,4 @@
 name: vault
-version: v1.1.5-beta.3
+version: v1.1.5
 repository: https://github.com/PlakarKorp/integration-vault
 checksum: sha256:bbadbeef15adeadbeefea7deadbeef
