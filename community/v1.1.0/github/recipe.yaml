@@ -1,0 +1,4 @@
+name: github
+version: v0.2.0
+repository: https://github.com/tienou/integration-github
+checksum: sha256:abadbeef15adeadbeefea7deadbeef
